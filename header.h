@@ -1,3 +1,5 @@
+#include <array>
+
 #include "Sphere.h"
 #include "Cuboid.h"
 
