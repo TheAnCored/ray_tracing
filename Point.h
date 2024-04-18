@@ -3,6 +3,8 @@
 #include <cstdarg>
 #include <omp.h>
 
+#pragma once
+
 #define N 3
 
 class Point{
@@ -19,8 +21,11 @@ public:
     // All coordinates like arg
     Point(int, ...);
 
+    // Copy constructor
+    Point(const Point&);
+
     // Move constructor
-    Point(Point&);
+    Point(Point&&);
 
 //-------------------------------------------
 //------Operators----------------------------
@@ -38,7 +43,7 @@ public:
 
     // Op=
     Point& operator=(const Point&);
-    Point&& operator=(const Point&&);
+    Point& operator=(Point&&);
 //-------------------------------------------
 //------Methods------------------------------
 
