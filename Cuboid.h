@@ -1,5 +1,7 @@
 #include "Figure.h"
 
+#pragma once
+
 //------ using points = std::vector<std::vector<std::vector<Point>>> -----
 
 class Cuboid: protected Figure{

@@ -4,7 +4,7 @@
 
 class Sphere: protected Figure{
 private:
-    std::shared_ptr<Point> center;
+    Point center;
     double radius;
 
 public:

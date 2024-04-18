@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <cstdarg>
-#include <omp.h>
+//#include <omp.h>
 
 #pragma once
 
@@ -34,12 +34,9 @@ public:
     double& operator[](int) const;
 
     // Op+
-    Point& operator+(Point&);
-    std::shared_ptr<Point> operator+(std::shared_ptr<Point>);
-
+    Point operator+(const Point&)const;
     // Op-
-    Point& operator-(Point&);
-    std::shared_ptr<Point> operator-(std::shared_ptr<Point>);
+    Point operator-(const Point&)const;
 
     // Op=
     Point& operator=(const Point&);

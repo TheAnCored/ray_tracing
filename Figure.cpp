@@ -1,6 +1,12 @@
 #include "Figure.h"
 
 //-----Constructors------------------------------
+Figure::Figure(){
+    std::get<0>(this->colour) = 255;
+    std::get<1>(this->colour) = 255;
+    std::get<2>(this->colour) = 255;
+}
+
 Figure::Figure(unsigned char R, unsigned char G, unsigned char B){
     std::get<0>(this->colour) = R;
     std::get<1>(this->colour) = G;
@@ -29,7 +35,7 @@ double dot_product(std::vector<double> first, std::vector<double> second){
 
     #pragma omp parallel for reduction(+: dot_product)
     for(int i=0; i<N; ++i){
-        dot_product+=first[i]+second[i];
+        dot_product = dot_product+first[i]*second[i];
     }
     return dot_product;
 }
