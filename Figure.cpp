@@ -33,7 +33,7 @@ void Figure::set_b(unsigned char B){
 double dot_product(std::vector<double> first, std::vector<double> second){
     double dot_product=0.;
 
-    #pragma omp parallel for reduction(+: dot_product)
+    //#pragma omp parallel for reduction(+: dot_product)
     for(int i=0; i<N; ++i){
         dot_product = dot_product+first[i]*second[i];
     }

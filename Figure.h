@@ -1,14 +1,13 @@
 #include <tuple>
 #include <iostream>
 #include <vector>
+#include <array>
 
 #pragma once
 
 #include "Point.h"
 
-using space = std::vector<std::vector<std::vector<Point>>>;
-using plane = std::vector<std::vector<Point>>;
-using line = std::vector<Point>;
+using array3d = std::array<std::array<std::array<Point, 2>, 2>, 2>;
 
 class Figure{
 protected:

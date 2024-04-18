@@ -2,12 +2,10 @@
 
 #pragma once
 
-//------ using points = std::vector<std::vector<std::vector<Point>>> -----
-
 class Cuboid: protected Figure{
 private:
     // Here are points is vertexes of rectangular cuboid
-    space vertexes; 
+    array3d vertexes; 
 
 public:
 //-----Constructors--------------------------    

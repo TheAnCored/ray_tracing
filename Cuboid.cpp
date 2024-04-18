@@ -2,12 +2,9 @@
 
 //-----Constructors--------------------------
 Cuboid::Cuboid():Figure(){
-
-    this->vertexes = space(2);
-    for(int i=0; i<2;++i){
-        this->vertexes[i] = plane(2);
+    for(int i=0; i<2; ++i){
         for(int j=0; j<2; ++j){
-            this->vertexes[i][j] = line(2);
+            for(int k=0; k<2; ++k){ this->vertexes[i][j][k] = Point(); }
         }
     }
 
@@ -16,11 +13,9 @@ Cuboid::Cuboid():Figure(){
 
 Cuboid::Cuboid(Point nearest, Point farther):Figure(){
     
-    this->vertexes = space(2);
-    for(int i=0; i<2;++i){
-        this->vertexes[i] = plane(2);
+    for(int i=0; i<2; ++i){
         for(int j=0; j<2; ++j){
-            this->vertexes[i][j] = line(2);
+            for(int k=0; k<2; ++k){ this->vertexes[i][j][k] = Point(); }
         }
     }
 

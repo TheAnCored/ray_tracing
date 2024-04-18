@@ -18,7 +18,10 @@ int main(){
 
     Point center;
     Sphere sph(center,{254,12,123});
-    Cuboid cube;
+
+    Point near(3,1,1,1);
+    Point far(3,10,10,10);
+    Cuboid cube(near, far);
 
 
     return 0;
