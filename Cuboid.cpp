@@ -36,7 +36,7 @@ void Cuboid::calculate_vertexes(){
     std::vector<double> oy{0,1,0};
 
     std::vector<double> diagonal_vector(3,0.);
-    for(int i=0; i<N; ++i){
+    for(int i=0; i<3; ++i){
        diagonal_vector[i] = this->vertexes[1][1][1][i] - this->vertexes[0][0][0][i];
     }
 

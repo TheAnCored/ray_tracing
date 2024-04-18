@@ -1,11 +1,8 @@
 #include <iostream>
 #include <memory>
 #include <cstdarg>
-//#include <omp.h>
 
 #pragma once
-
-#define N 3
 
 class Point{
 private:    
@@ -19,7 +16,7 @@ public:
     Point(std::shared_ptr<double[]>); 
 
     // All coordinates like arg
-    Point(int, ...);
+    Point(double, double, double);
 
     // Copy constructor
     Point(const Point&);
