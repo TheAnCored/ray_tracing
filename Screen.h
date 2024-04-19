@@ -8,10 +8,12 @@
 #define PI 3.14159265
 #define RAD(angle) angle*PI/180
 
+
 using uint = unsigned int;
 using size = std::array<double,2>;
 using psize = std::array<unsigned int,2>;
 using vect = std::vector<double>;
+// using pixels = std::vector<std::vector<std::vector<int>>>; // enumerate pixels like an elements in matrix
 
 class Screen{
 protected:
@@ -22,6 +24,8 @@ protected:
 
     vect direction_of_view; // Направление, куда будем смотреть
     vect rotation; // Обобщённый вектор, обозначающий угол поворота экрана отн-но направления
+
+   
 public:
     // Empty
     Screen();
