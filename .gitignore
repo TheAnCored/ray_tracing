@@ -3,3 +3,11 @@ prog
 .vscode
 *.pdf
 *.exe
+x64 
+ray_tracing 
+enc_temp_folder 
+ray_tracing.sln 
+ray_tracing.vcxproj 
+ray_tracing.vcxproj.filters
+ray_tracing.vcxproj.user 
+.vs

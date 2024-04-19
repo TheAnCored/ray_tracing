@@ -6,7 +6,7 @@
 
 class Point{
 private:    
-    std::unique_ptr<double[]> point;
+    std::unique_ptr<double[]> point_;
 public:
 //------Constructors-------------------------
     Point(); // Empty

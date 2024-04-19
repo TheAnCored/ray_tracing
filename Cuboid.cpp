@@ -2,24 +2,24 @@
 
 //-----Constructors--------------------------
 Cuboid::Cuboid():Figure(){
-    for(int i=0; i<2; ++i){
-        for(int j=0; j<2; ++j){
-            for(int k=0; k<2; ++k){ this->vertexes[i][j][k] = Point(); }
+    for(unsigned int i=0; i<2; ++i){
+        for(unsigned int j=0; j<2; ++j){
+            for(unsigned int k=0; k<2; ++k){ this->vertexes[i][j][k] = Point(); }
         }
     }
 
-    this->colour = {255,255,255};
+    this->colour_ = {255,255,255};
 }
 
 Cuboid::Cuboid(Point nearest, Point farther):Figure(){
     
-    for(int i=0; i<2; ++i){
-        for(int j=0; j<2; ++j){
-            for(int k=0; k<2; ++k){ this->vertexes[i][j][k] = Point(); }
+    for(unsigned int i=0; i<2; ++i){
+        for(unsigned int j=0; j<2; ++j){
+            for(unsigned int k=0; k<2; ++k){ this->vertexes[i][j][k] = Point(); }
         }
     }
 
-    this->colour = {255,255,255};
+    this->colour_ = {255,255,255};
 
     this->vertexes[0][0][0] = nearest;
     this->vertexes[1][1][1] = farther;

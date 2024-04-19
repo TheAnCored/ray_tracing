@@ -4,8 +4,8 @@
 
 class Sphere: protected Figure{
 private:
-    Point center;
-    double radius;
+    Point center_;
+    double radius_;
 
 public:
 //------Constructors-------------------------

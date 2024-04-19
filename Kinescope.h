@@ -18,15 +18,6 @@ protected:
 public:
     // Empty
     Kinescope();
-    /* All data:    
-        1. point_of_view, 
-        2. pheight, 
-        3. pwidth, 
-        4. distance, 
-        5. angle,
-        6. limit_of_visibility, 
-        7. normal vect,
-        8. angle_of_rotation
-    */
-    Kinescope(Point, uint, uint, double, double, double, vect, vect);
+    // With all data
+    Kinescope(Point point_of_view, uint pheight, uint pwidth, double distance, double angle, double limit_of_visibility, vect norm_vect, vect rotation);
 };

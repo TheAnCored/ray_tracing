@@ -3,6 +3,10 @@
 #include <iostream>
 #include <cmath>
 #include <array>
+#include <vector>
+
+#define PI 3.14159265
+#define RAD(angle) angle*PI/180
 
 using uint = unsigned int;
 using size = std::array<double,2>;
@@ -49,6 +53,4 @@ public:
 
     // ph,pw,d,an
     void setup(uint,uint, double, double);
-    
-    // Operators
 };

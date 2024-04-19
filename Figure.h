@@ -11,7 +11,7 @@ using array3d = std::array<std::array<std::array<Point, 2>, 2>, 2>;
 
 class Figure{
 protected:
-    std::tuple<unsigned char, unsigned char, unsigned char> colour;
+    std::tuple<unsigned int, unsigned int, unsigned int> colour_;
 
 public:
 //-----Constructors---------------------------------
@@ -19,14 +19,14 @@ public:
     Figure();
 
     // Colour
-    Figure(unsigned char, unsigned char, unsigned char);
+    Figure(unsigned int, unsigned int, unsigned int);
 //--------------------------------------------------
 //------Methods-------------------------------------
     // Set colour of figure
-    void set_colour(unsigned char, unsigned char, unsigned char);
-    void set_r(unsigned char);
-    void set_g(unsigned char);
-    void set_b(unsigned char);
+    void set_colour(unsigned int, unsigned int, unsigned int);
+    void set_r(unsigned int);
+    void set_g(unsigned int);
+    void set_b(unsigned int);
 
     // the intersection of a ray and a shape
     //bool intetsection();

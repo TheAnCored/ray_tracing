@@ -64,19 +64,17 @@ void Screen::set_width(double width){ this->screen_size[1] = width; }
 void Screen::setup(double distance, double angle){
     if(this->screen_psize[0]==0 || this->screen_psize[1]==0){ std::cout<<"GIVEN ZERO\n---BREAK---\n\n"; return; }
 
-    this->screen_size[0] = 2*tan(angle/2)*(this->screen_size[1]);
+    this->screen_size[0] = 2*tan(RAD(angle/2))*distance;
     this->pixel_size = this->screen_size[0]/this->screen_psize[0];
     this->screen_size[1] = pixel_size*this->screen_psize[1];
 }
 
 void Screen::setup(uint pheight, uint pwidth, double distance, double angle){
-    this->screen_size[0] = pheight; this->screen_size[1] = pwidth;
+    this->screen_psize[0] = pheight; this->screen_psize[1] = pwidth;
     
     if(this->screen_psize[0]==0 || this->screen_psize[1]==0){ std::cout<<"GIVEN ZERO\n---BREAK---\n\n"; return; }
 
-    this->screen_size[0] = 2*tan(angle/2)*(this->screen_size[1]);
+    this->screen_size[0] = 2*tan(RAD(angle/2))*distance;
     this->pixel_size = this->screen_size[0]/this->screen_psize[0];
     this->screen_size[1] = pixel_size*this->screen_psize[1];
 }
-
-//-----Operators---------

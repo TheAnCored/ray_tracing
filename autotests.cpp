@@ -2,8 +2,8 @@
 
 int point_sum_test(){
 
-    Point a(3,1,2,34);
-    Point b(3,3,4,112);
+    Point a(1,2,34);
+    Point b(3,4,112);
 
     Point c = a+b;
     Point d; d = a+b;
@@ -15,8 +15,8 @@ int point_sum_test(){
 
 int point_sub_test(){
 
-    Point a(3,1,2,34);
-    Point b(3,3,4,112);
+    Point a(1,2,34);
+    Point b(3,4,112);
 
    Point c = a-b;
    Point d; d = a-b;
