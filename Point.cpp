@@ -24,9 +24,9 @@ Point::Point(std::shared_ptr<double[]> coordinates){
 
 Point::Point(double c1, double c2, double c3){
     this->point_ = std::make_unique<double[]>(3);
-
+    
     this->point_[0] = c1; this->point_[1] = c2; this->point_[2] = c3; 
-}
+} 
 
 // Copy constructor
 Point::Point(const Point& second){

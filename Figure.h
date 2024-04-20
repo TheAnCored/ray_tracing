@@ -35,6 +35,8 @@ public:
 
     // the intersection of a ray and a shape
     virtual bool intersection(Point& pixel, Point& cam)=0;
+
+    //------Operators----------------
 };
 
 double dot_product(std::vector<double>, std::vector<double>);

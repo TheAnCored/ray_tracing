@@ -35,4 +35,7 @@ public:
     std::vector<unsigned char> get_colour() ;
 
     bool intersection(Point& P, Point& C);
+
+//------Operators-------------
+
 }; 

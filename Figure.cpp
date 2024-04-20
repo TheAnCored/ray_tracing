@@ -19,11 +19,10 @@ void Figure::set_b(unsigned char B){ this->colour_[2] = B; }
 //----------------------
 
 double dot_product(std::vector<double> first, std::vector<double> second){
-    double dot_product=0.;
+    double dot_product=0.0f;
 
-    //#pragma omp parallel for reduction(+: dot_product)
-    for(unsigned int i=0; i<3; ++i){
-        dot_product = dot_product+first[i]*second[i];
+    for(int i=0; i<3; ++i){
+        dot_product += first[i]*second[i];
     }
     return dot_product;
 }

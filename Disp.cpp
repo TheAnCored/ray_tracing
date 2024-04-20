@@ -43,9 +43,13 @@ Disp::Disp(uint pheight, uint pwidth, double distance, double angle, vect norm, 
 
     // Normalizing vectors
     double vector_eucl_norm = sqrt(pow(norm[0],2)+pow(norm[1],2)+pow(norm[2],2));
-    for(int i=0; i<3; ++i){ norm[i] /= vector_eucl_norm; }
+    for(int i=0; i<3; ++i){ 
+        norm[i] /= vector_eucl_norm; 
+    }
 
-    for(int i=0; i<3; ++i){ rot[i] /= sqrt(pow(rot[0],2)+pow(rot[1],2)+pow(rot[2],2)); }
+    for(int i=0; i<3; ++i){ 
+        rot[i] /= sqrt(pow(rot[0],2)+pow(rot[1],2)+pow(rot[2],2)); 
+    }
     //---
     
     this->direction_of_view_ = norm;
