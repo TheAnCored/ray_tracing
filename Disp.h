@@ -13,27 +13,29 @@ using uint = unsigned int;
 using size = std::array<double,2>;
 using psize = std::array<unsigned int,2>;
 using vect = std::vector<double>;
-// using pixels = std::vector<std::vector<std::vector<int>>>; // enumerate pixels like an elements in matrix
+using pixels = std::vector<std::vector<std::vector<unsigned char>>>; // enumerate pixels like an elements in matrix
 
-class Screen{
+class Disp{
 protected:
     // vertical is height, horizontal is width
-    psize screen_psize;
-    double pixel_size;
-    size screen_size;
+    psize screen_psize_; // in PIXEL
+    double pixel_size_; // in double
+    size screen_size_; // in double
 
-    vect direction_of_view; // Направление, куда будем смотреть
-    vect rotation; // Обобщённый вектор, обозначающий угол поворота экрана отн-но направления
+    // ----- DIRECTIONS --------------
+    vect direction_of_view_; // Направление, куда будем смотреть
+    vect rotation_; // Обобщённый вектор, обозначающий угол поворота экрана отн-но направления
 
-   
+    // ----- PIXEL -------------
+    pixels pixel_; // Пиксели экрана
 public:
     // Empty
-    Screen();
+    Disp();
 
     // With size
-    Screen(uint pheight, uint pwidth);
-    Screen(uint pheight, uint pwidth, double distance, double angle);
-    Screen(uint pheight, uint pwidth, double distance, double angle, vect norm, vect rot);
+    Disp(uint pheight, uint pwidth);
+    Disp(uint pheight, uint pwidth, double distance, double angle);
+    Disp(uint pheight, uint pwidth, double distance, double angle, vect norm, vect rot);
 
     //------ Methods -------
     // Get-functions

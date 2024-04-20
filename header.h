@@ -2,7 +2,8 @@
 #include <cmath>
 
 #include "Sphere.h"
-#include "Cuboid.h"
+//#include "Cuboid.h"
 #include "Kinescope.h"
+#include "Figure.h"
 
 #include "autotests.h"

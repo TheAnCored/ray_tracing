@@ -15,18 +15,24 @@ public:
     // Radius of sphere
     Sphere(double);
     // Sphere's colour
-    Sphere(std::tuple<unsigned char, unsigned char, unsigned char>);
+    Sphere(std::vector<unsigned char>);
 
     // radius+center
     Sphere(double, Point&);
     // radius+colour
-    Sphere(double, std::tuple<unsigned char, unsigned char, unsigned char>);
+    Sphere(double, std::vector<unsigned char>);
     // center+colour
-    Sphere(Point&, std::tuple<unsigned char, unsigned char, unsigned char>);
+    Sphere(Point&, std::vector<unsigned char>);
     // All data
-    Sphere(double, Point&, std::tuple<unsigned char, unsigned char, unsigned char>);
+    Sphere(double, Point&, std::vector<unsigned char>);
 //--------------------------------------------
 
 //------Methods-------------------------------
+    // Set-functions
     void set_colour(unsigned char, unsigned char, unsigned char);
+
+    // Get-functions
+    std::vector<unsigned char> get_colour() ;
+
+    bool intersection(Point& P, Point& C);
 }; 

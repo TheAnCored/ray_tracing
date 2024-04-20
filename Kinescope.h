@@ -3,17 +3,19 @@
 #include <iostream>
 #include <vector>
 
-#include "Screen.h"
+#include "Disp.h"
 #include "Point.h"
+#include "Figure.h"
+//#include "CImg.h"
 
-class Kinescope: protected Screen{
+class Kinescope: protected Disp{
 protected:
-    Point point_of_view; // perspective projection
+    Point point_of_view_; // perspective projection
 
-    double screen_distance; // between point of view and screen
-    double angle_of_vision; // on the screen
+    double screen_distance_; // between point of view and screen
+    double angle_of_vision_; // on the screen
 
-    double limit_of_visibility; // by the point_of_view
+    double limit_of_visibility_; // by the point_of_view
 
 public:
     //------Constructors-----------------
@@ -24,6 +26,7 @@ public:
     //-----------------------------------
 
     //------Methods----------------------
-    
+    void get_image(std::shared_ptr<Figure>);
+    void convert_to_bmp();
     //-----------------------------------
 };

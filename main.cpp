@@ -1,7 +1,5 @@
 #include "header.h"
 
-
-
 int main(){
     //---------Autotests---------
     if(MainTest()!=0){ return 1; }
@@ -24,8 +22,7 @@ int main(){
 
     Point near(1,1,1);
     Point far(10,10,10);
-    Cuboid cube(near, far);
-
+    //Cuboid cub;
 
     return 0;
 }

@@ -1,9 +1,10 @@
-#include <tuple>
+#pragma once
+
 #include <iostream>
 #include <vector>
 #include <array>
-
-#pragma once
+#include <cmath>
+#include <cfloat>
 
 #include "Point.h"
 
@@ -11,7 +12,7 @@ using array3d = std::array<std::array<std::array<Point, 2>, 2>, 2>;
 
 class Figure{
 protected:
-    std::tuple<unsigned int, unsigned int, unsigned int> colour_;
+    std::vector<unsigned char> colour_;
 
 public:
 //-----Constructors---------------------------------
@@ -19,17 +20,21 @@ public:
     Figure();
 
     // Colour
-    Figure(unsigned int, unsigned int, unsigned int);
+    Figure(unsigned char R, unsigned char G, unsigned char B);
 //--------------------------------------------------
 //------Methods-------------------------------------
+    // Get-function
+    virtual std::vector<unsigned char> get_colour()=0;
+
     // Set colour of figure
-    void set_colour(unsigned int, unsigned int, unsigned int);
-    void set_r(unsigned int);
-    void set_g(unsigned int);
-    void set_b(unsigned int);
+    void set_colour(unsigned char, unsigned char, unsigned char);
+    
+    void set_r(unsigned char);
+    void set_g(unsigned char);
+    void set_b(unsigned char);
 
     // the intersection of a ray and a shape
-    //bool intetsection();
+    virtual bool intersection(Point& pixel, Point& cam)=0;
 };
 
 double dot_product(std::vector<double>, std::vector<double>);
