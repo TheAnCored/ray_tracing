@@ -1,26 +1,32 @@
-// #include "Figure.h"
+#include "Figure.h"
 
-// #pragma once
+#pragma once
 
-// class Cuboid: protected Figure{
-// private:
-//     // Here are points is vertexes of rectangular cuboid
-//     array3d vertexes; 
+using edge = std::array<std::array<std::shared_ptr<Point>,4>, 6>;
 
-// public:
-// //-----Constructors--------------------------    
-//     Cuboid(); // Empty
-//     // Two opposite points of cuboid
-//     Cuboid(Point, Point);
-// //-------------------------------------------
+class Cuboid: protected Figure{
 
-// //-----Methods-------------------------------
-//     // Get-functions
-//     virtual std::vector<unsigned char> get_colour();
+private:
+    // Here are points is vertexes of rectangular cuboid
+    array3d vertexes; 
+    
+    // Грани параллелепипеда
+    edge edges_;
+public:
+//-----Constructors--------------------------    
+    Cuboid(); // Empty
+    // Two opposite points of cuboid
+    Cuboid(Point, Point);
+//-------------------------------------------
 
-//     // This is a method that allows you to find all the vertices of a cuboid by two opposite
-//     void calculate_vertexes();
+//-----Methods-------------------------------
+    // Get-functions
+    virtual std::vector<unsigned char> get_colour();
 
-//     //virtual bool intersection(Point& pixel, Point& cam);
-// //-------------------------------------------
-// };
+    // This is a method that allows you to find all the vertices of a cuboid by two opposite
+    void calculate_vertexes();
+    void calculate_edge();
+
+    virtual std::tuple<bool, double, bool> intersection(Point& pixel, Point& cam, Point& light);
+//-------------------------------------------
+};

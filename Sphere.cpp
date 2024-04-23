@@ -66,7 +66,7 @@ std::vector<unsigned char> Sphere::get_colour(){
     return tmp;
 }
 
-bool Sphere::intersection(Point& P, Point& C){
+std::tuple<bool, double, bool> Sphere::intersection(Point& P, Point& C, Point& L){
     Point M; // On sphere
 
     std::vector<double> CP = {P[0]-C[0], P[1]-C[1], P[2]-C[2]}; 
@@ -81,7 +81,7 @@ bool Sphere::intersection(Point& P, Point& C){
     // Проверка на отрицательность дискриминанта
     {
         double tmp = dot_CO_CO-radius_*radius_;
-        if(tmp < 0){ return 0; }
+        if(tmp < 0){ return std::tuple<bool,double, double>{0,0,0}; }
     }
 
     discriminant = 4*dot_CP_CO*dot_CP_CO - 4*dot_CP_CP*(dot_CO_CO-radius_*radius_);
@@ -94,9 +94,9 @@ bool Sphere::intersection(Point& P, Point& C){
         for(int i=0; i<3; ++i){
             M[i] = C[i] + parameter*CP[i];
         }
-        // Здесь ещё должны быть лучи света!
+        std::tuple<bool, double, bool> temp{1,0.f,0};
 
-        return 1;
+        return temp;
     }
     else if(discriminant>0){
         /*
@@ -111,27 +111,56 @@ bool Sphere::intersection(Point& P, Point& C){
 
         if(parameter2 >= 0){
             parameter = parameter2;
-            
-            for(int i=0; i<3; ++i){
-                M[i] = C[i] + parameter*CP[i];
-            }
-            // Тут код по расчёту оттенка
-            
-
-            return 1;
         }
         else if(parameter2 < 0 && parameter1 >= 0){
             parameter = parameter1;
-            
-            for(int i=0; i<3; ++i){
-                M[i] = C[i] + parameter*CP[i];
-            }
-            // Тут код по расчёту оттенка
-
-
-            return 1;
         }
+   
+        for(int i=0; i<3; ++i){
+            M[i] = C[i] + parameter*CP[i];
+        }
+
+        // Найдем нормаль в точке касания и единичный вектор из точки касания к свету
+        std::vector<double> ML(3, 0.0f); // Вектор, соединяющий точку пресечения и свет
+        std::vector<double> OM(3, 0.0f); // Нормаль к поверхности
+        double norm_ML=0.0f, norm_OM=0.0f;
+
+        // Вектор от точки пересечения к свету и его нормировка
+        for(int i =0; i<3; ++i){        
+            ML[i] = L[i] - M[i];
+            OM[i] = M[i] - center_[i];
+        }
+        norm_ML = sqrt(dot_product(ML,ML));
+        norm_OM = sqrt(dot_product(OM,OM));
+        for(int i =0; i<3; ++i){        
+            ML[i] /= norm_ML;
+            OM[i] /= norm_OM;
+        }
+
+        // Вычисление косинуса угла между двумя векторами
+        std::tuple<bool, double, bool> temp{1,dot_product(ML,OM),0};
+
+        // Вычислим координаты вектора, противоположнонаправленного к отраженному лучу света
+        // и также сразу найдём его влияние на освещение
+        std::vector<double> norm_PC(3);
+        std::vector<double> tau(3, 0.f); 
+
+
+        for(int i=0; i<3; ++i){ 
+            norm_PC[i] = -CP[i]/(sqrt(dot_product(CP,CP)));
+
+            tau[i] = (1+dot_product(ML,OM))*OM[i] - ML[i]; 
+        }   
+        
+        if(std::abs(tau[0]-norm_PC[0])<std::max(std::abs(norm_PC[0]),std::abs(tau[0])*DBL_EPSILON) &&
+           std::abs(tau[1]-norm_PC[1])<std::max(std::abs(norm_PC[1]),std::abs(tau[1])*DBL_EPSILON) &&
+           std::abs(tau[2]-norm_PC[2])<std::max(std::abs(norm_PC[2]),std::abs(tau[2])*DBL_EPSILON)
+        ){
+            std::get<2>(temp) = 1;
+        }
+
+        return temp;
     }
 
-    return 0;
+    return {0,0,0};
 }

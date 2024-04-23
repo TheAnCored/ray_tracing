@@ -1,4 +1,5 @@
 #include "Figure.h"
+#include "Disp.h"
 
 #pragma once
 
@@ -34,7 +35,8 @@ public:
     // Get-functions
     std::vector<unsigned char> get_colour() ;
 
-    bool intersection(Point& P, Point& C);
+    // Пересечение фигуры
+    std::tuple<bool, double, bool> intersection(Point& P, Point& C, Point& L);
 
 //------Operators-------------
 

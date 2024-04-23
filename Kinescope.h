@@ -8,6 +8,7 @@
 #include "Figure.h"
 #include "Sphere.h"
 #include "CImg.h"
+#include "Cuboid.h"
 
 class Kinescope: protected Disp{
 protected:
@@ -18,7 +19,7 @@ protected:
 
     double limit_of_visibility_; // by the point_of_view
 
-    Point light;
+    Point light_;
 public:
     //------Constructors-----------------
     // Empty
@@ -33,8 +34,9 @@ public:
     //-----------------------------------
 
     //------Methods----------------------
-    void get_image(std::shared_ptr<Sphere> figures);
+    void get_image(std::shared_ptr<Sphere>);
     void get_image(std::vector<std::shared_ptr<Figure>>);
+    void get_image(std::shared_ptr<Cuboid>);
     void convert_to_bmp();
     //-----------------------------------
 };
