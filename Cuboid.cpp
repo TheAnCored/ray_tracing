@@ -100,7 +100,7 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
     Point m;
     double t=0.; // Параметр пересечения
     double temp_t = 0.; // Временный параметр пересечения, который будем считать
-   // int surf=0; // Номер плоскости, в котором лежит точка 
+    int surf=0; // Номер плоскости, в котором лежит точка 
     
     for(int i=0, k=0, l=0, inter=0; i<6; ++i){
     
@@ -155,22 +155,23 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
             M = m;
             ++k;
             std::get<0>(parameters) = true;
-            //surf = i;
+            surf = i;
         }
     }
 
     std::vector<double> light={L[0]-M[0],L[1]-M[1],L[2]-M[2]};
-    // if(std::get<0>(parameters) == 1){
-    //     // Тут поработаем с тенями
-    //     switch(surf){
-    //         case 0: std::get<1>(parameters) = dot_product({-1,0,0}, light);
-    //         case 1: std::get<1>(parameters) = dot_product({0,-1,0}, light);
-    //         case 2: std::get<1>(parameters) = dot_product({0,0,-1}, light);
-    //         case 3: std::get<1>(parameters) = dot_product({1,0,0}, light);
-    //         case 4: std::get<1>(parameters) = dot_product({0,1,0}, light);
-    //         case 5: std::get<1>(parameters) = dot_product({0,0,1}, light);
-    //     }
-    // }
+    if(std::get<0>(parameters) == 1){
+        // Тут поработаем с тенями
+        switch(surf){
+            case 0: std::get<1>(parameters) = dot_product({-1,0,0}, light);
+            case 1: std::get<1>(parameters) = dot_product({0,-1,0}, light);
+            case 2: std::get<1>(parameters) = dot_product({0,0,-1}, light);
+            case 3: std::get<1>(parameters) = dot_product({1,0,0}, light);
+            case 4: std::get<1>(parameters) = dot_product({0,1,0}, light);
+            case 5: std::get<1>(parameters) = dot_product({0,0,1}, light);
+        }
+    }
+    
     return parameters;
 }
 //-------------------------------------------
