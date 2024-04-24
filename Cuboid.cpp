@@ -97,12 +97,12 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
 
     // Вычисление точки пересечения
     Point M;
-    Point m;
+
     double t=0.; // Параметр пересечения
     double temp_t = 0.; // Временный параметр пересечения, который будем считать
     int surf=0; // Номер плоскости, в котором лежит точка 
     
-    for(int i=0, k=0, l=0, inter=0; i<6; ++i){
+    for(int i=0,k=0, l=0, inter=0; i<6; ++i){
     
         // Вводим ещё параметр k для того, чтобы отследить самое первое пересечение
         // точки с какой-либо гранью'
@@ -115,21 +115,33 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
 
         // Здесь условие на то, что знаменатель не обратиться в нуль. Это означает, что либо точки лежат в одной плоскости,
         // либо прямая параллельна плоскости
-        if( std::abs(P[l]-C[l])<=std::max(std::abs(P[l]),std::abs(C[l]))*DBL_EPSILON ){ continue; }
+        if( std::abs(P[l]-C[l])<=std::max(std::abs(P[l]),std::abs(C[l]))*FLT_EPSILON ){ continue; }
 
-        temp_t = ((*edges_[i][0])[l] - P[l])/(P[l]-C[l]); 
-
-        if(temp_t < 0.){ continue; }
-        else if( temp_t == 0.){ 
-            inter = true; 
+        // Случай, когда точка грани совпала с пикселем
+        if(std::abs((*edges_[i][0])[l] - P[l])<=std::max(std::abs((*edges_[i][0])[l]),std::abs(P[l]))*DBL_EPSILON){
+            t = ((*edges_[i][0])[l] - P[l])/(P[l]-C[l]); // Вычислсяем параметр
             
-            t = temp_t;
-            M = m;
-            ++k;
+            // Вычисляем точку пересечения
+            Point M;
+            for(int j=0; j<3; ++j){
+                M[j] = P[j] + t*(P[j]-C[j]);
+            }
+
+            // Записываем нужные параметры
             std::get<0>(parameters) = true;
-            // Может быть тут стоит добавить условие, что temp_t<t? Но посмотрим, что будет на практике
+            surf = i;
+            ++k;
+
+            continue;
         }
 
+        // Вычисляем параметр
+        temp_t = ((*edges_[i][0])[l] - P[l])/(P[l]-C[l]); 
+        
+        // Логично, что случай меньше нуля сразу отбросим, т.к. точка находится за экраном 
+        if(temp_t < 0.){ continue; }
+
+        Point m; // Временная точка 
         // Вычисление точки на параллелепипеде
         for(int j=0; j<3; ++j){
             m[j] = P[j] + temp_t*(P[j]-C[j]);
@@ -137,12 +149,16 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
             // Здесь почему-то двойное неравенство ломалось на тех случаях, когда 8>=8 && 8<=8
             // поэтому я в добавок ещё расписал условие равенства на каждый случай:
             // ( m[j] >= (*edges_[i][0])[j] && m[j] <= (*edges_[i][1])[j] ) || m[j] == (*edges_[i][0])[j]) || m[j] == (*edges_[i][1])[j])
-            if( (m[j] > (*edges_[i][0])[j] && m[j] < (*edges_[i][1])[j]) ||
-                std::abs(m[j]-(*edges_[i][0])[j]) <= std::max(std::abs(m[j]),std::abs((*edges_[i][0])[j]))*DBL_EPSILON ||
-                std::abs(m[j]-(*edges_[i][1])[j]) <= std::max(std::abs(m[j]),std::abs((*edges_[i][1])[j]))*DBL_EPSILON
-            ){ inter = true; }
-            else{ inter = false; break; }
+            // Также ломалось условие при слишком малых разницах, поэтому применил FLT_EPSILON
+            if(m[j] >= (*edges_[i][0])[j] && m[j] <= (*edges_[i][1])[j]){ inter = true; }
+            else if(std::abs(m[j]-(*edges_[i][0])[j]) <= std::max(std::abs(m[j]),std::abs((*edges_[i][0])[j]))*std::numeric_limits<float>::epsilon()){ inter = true; }
+            else if(std::abs(m[j]-(*edges_[i][1])[j]) <= std::max(std::abs(m[j]),std::abs((*edges_[i][1])[j]))*std::numeric_limits<float>::epsilon()){ inter = true; }
+            else{ 
+                inter = false; 
+                break; 
+            }
             // ПРАВИЛЬНО СРАВНИВАТЬ С ЭПСИЛОНОМ НА <= !!!!!!!
+            // также иногда нужно использовать FLT_EPSILON
         }
 
         // Далее нужно сохранить параметр
@@ -150,28 +166,81 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
         // имеем параметр t, который является количественной мерой расстояния до объекта
         // с помощью вектора CP. Проще говоря, есть точка, до которой нужно ехать 5*CP
         // векторов и есть ещё 7*CP. Логично, что ближе будет 5*CP
-        if(inter == true && (k==0 || temp_t<t)){  
-            t = temp_t;
-            M = m;
+        if(inter == true){  
+            if( k == 0 ){
+                t = temp_t;
+                M = m;
+                std::get<0>(parameters) = true;
+                surf = i;
+            }
+            else if( temp_t < t){
+                t = temp_t;
+                M = m;
+                std::get<0>(parameters) = true;
+                surf = i;
+            }
             ++k;
-            std::get<0>(parameters) = true;
-            surf = i;
         }
     }
 
-    std::vector<double> light={L[0]-M[0],L[1]-M[1],L[2]-M[2]};
+    // Далее смотрим параметр
     if(std::get<0>(parameters) == 1){
+        std::vector<double> light={L[0]-M[0],L[1]-M[1],L[2]-M[2]}; // Вектор в сторону точки света от точки на фигуре
+
+        // Нормировка этого же вектора
+        for(int j=0; j<3; ++j){
+            light[j] /= sqrt(dot_product(light,light));
+        }
+
         // Тут поработаем с тенями
+        double temp_dot=0.; // Этот параметр нужен для того, чтобы проверить на отрицательность скалярное произведение
+
+        // Далее идёт выбор стороны нормали
         switch(surf){
-            case 0: std::get<1>(parameters) = dot_product({-1,0,0}, light);
-            case 1: std::get<1>(parameters) = dot_product({0,-1,0}, light);
-            case 2: std::get<1>(parameters) = dot_product({0,0,-1}, light);
-            case 3: std::get<1>(parameters) = dot_product({1,0,0}, light);
-            case 4: std::get<1>(parameters) = dot_product({0,1,0}, light);
-            case 5: std::get<1>(parameters) = dot_product({0,0,1}, light);
+            case 0: 
+                temp_dot = dot_product({-1,0,0}, light); 
+                if(temp_dot >= 0){
+                    std::get<1>(parameters) = dot_product({-1,0,0}, light); 
+                }else{ std::get<1>(parameters) = 0.; }
+                break;
+
+            case 1: 
+                temp_dot = dot_product({0,-1,0}, light); 
+                if(temp_dot >= 0){
+                    std::get<1>(parameters) = dot_product({0,-1,0}, light); 
+                }else{ std::get<1>(parameters) = 0.; }
+                break;
+
+            case 2: 
+                temp_dot = dot_product({0,0,-1}, light); 
+                if(temp_dot > 0.){
+                    std::get<1>(parameters) = dot_product({0,0,-1}, light); 
+                }else{ std::get<1>(parameters) = 0.; }
+                break;
+
+            case 3: 
+                temp_dot = dot_product({1,0,0}, light); 
+                if(temp_dot > 0.){
+                    std::get<1>(parameters) = dot_product({1,0,0}, light); 
+                }else{ std::get<1>(parameters) = 0.; }
+                break;
+
+            case 4: 
+                temp_dot = dot_product({0,1,0}, light); 
+                if(temp_dot > 0.){
+                    std::get<1>(parameters) = dot_product({0,1,0}, light); 
+                }else{ std::get<1>(parameters) = 0.; }
+                break;
+
+            case 5:
+                temp_dot = dot_product({0,0,1}, light); 
+                if(temp_dot > 0.){
+                    std::get<1>(parameters) = dot_product({0,0,1}, light); 
+                }else{ std::get<1>(parameters) = 0.; }
+                break;
         }
     }
-    
+
     return parameters;
 }
 //-------------------------------------------

@@ -113,9 +113,9 @@ void Kinescope::get_image(std::shared_ptr<Cuboid> figure){
 
     // 2 ---- Вычисление точки B
     Point B(
-        D[0] + rotation_[0]*(screen_size_[0]/2-pixel_size_/2),
-        D[1] + rotation_[1]*(screen_size_[0]/2-pixel_size_/2),
-        D[2] + rotation_[2]*(screen_size_[0]/2-pixel_size_/2)
+        D[0] + rotation_[0]*(screen_size_[0]/2.-pixel_size_/2),
+        D[1] + rotation_[1]*(screen_size_[0]/2.-pixel_size_/2),
+        D[2] + rotation_[2]*(screen_size_[0]/2.-pixel_size_/2)
     ); 
     
     // 3 ---- Вычисление ортогонального вектора [b,n]
@@ -143,22 +143,20 @@ void Kinescope::get_image(std::shared_ptr<Cuboid> figure){
             
             // Проход по пересечениям фигуры
             std::tuple<bool, double, double> interns;
-            //std::cout<<"[i]"<<i;
-            //std::cout<<"[j]"<<j<<std::endl;
 
             interns = figure->intersection(start, point_of_view_, this->light_);
 
             if(std::get<0>(interns)==true){
                 pixel_[i][j] = figure->get_colour();
 
-                if(std::get<1>(interns)>=0 && std::get<2>(interns) == 0){ 
+                if(std::get<1>(interns)>0. && std::get<2>(interns) == 0){ 
                     for(int l=0; l<3; ++l){
                         pixel_[i][j][l] = pixel_[i][j][l]*std::get<1>(interns);
                     }
                 }
-                //else if(std::get<0>(interns)==1 && std::get<2>(interns) == 1){ pixel_[i][j] = {255,255,255};}
+                else if(std::get<0>(interns)==true && std::get<2>(interns) == true){ pixel_[i][j] = {255,255,255};}
                 else{ pixel_[i][j] = {0,0,0}; }
-            }else{ pixel_[i][j] = {119, 136, 153}; }
+            }else{ pixel_[i][j] = {105, 105, 105}; }
             
 
             // В конце обязательно сделаем переход к соседнему cправа пикселю
