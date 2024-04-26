@@ -218,10 +218,6 @@ void Kinescope::get_image(std::shared_ptr<Tetr> figure){
             // Проход по пересечениям фигуры
             std::tuple<bool, double, double> interns;
 
-            if(j==76 && i == 57){
-                std::cout<<"1\n";
-            }
-
             interns = figure->intersection(start, point_of_view_, this->light_);
 
             if(std::get<0>(interns)==true){
