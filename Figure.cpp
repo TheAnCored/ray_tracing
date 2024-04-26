@@ -26,3 +26,15 @@ double dot_product(std::vector<double> first, std::vector<double> second){
     }
     return dot_product;
 }
+
+std::vector<double> cross_product(std::vector<double> a, std::vector<double> b){
+    std::vector<double> norm = { a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]};
+    double module = sqrt(dot_product(norm, norm));
+    for(int i=0; i<3; ++i){ 
+        norm[i] /= module;
+    }
+
+    return norm;
+}
+
+std::vector<unsigned char> Figure::get_colour(){ return colour_;}

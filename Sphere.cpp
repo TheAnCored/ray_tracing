@@ -59,12 +59,6 @@ Sphere::Sphere(double radius, Point& center, std::vector<unsigned char> colour):
 //----------------------------------------------------
 
 //------Methods---------------------------------------
-void Sphere::set_colour(unsigned char R, unsigned char G, unsigned char B){ this->colour_ = { R, G, B}; }
-
-std::vector<unsigned char> Sphere::get_colour(){ 
-    std::vector<unsigned char> tmp = this->colour_;
-    return tmp;
-}
 
 std::tuple<bool, double, bool> Sphere::intersection(Point& P, Point& C, Point& L){
     Point M; // On sphere
@@ -145,9 +139,9 @@ std::tuple<bool, double, bool> Sphere::intersection(Point& P, Point& C, Point& L
         std::vector<double> norm_PC(3);
         std::vector<double> tau(3, 0.f); 
 
-
+        double module = sqrt(dot_product(CP,CP));
         for(int i=0; i<3; ++i){ 
-            norm_PC[i] = -CP[i]/(sqrt(dot_product(CP,CP)));
+            norm_PC[i] = -CP[i]/module;
 
             tau[i] = (1+dot_product(ML,OM))*OM[i] - ML[i]; 
         }   

@@ -5,5 +5,6 @@
 //#include "Cuboid.h"
 #include "Kinescope.h"
 #include "Figure.h"
+#include "Tetrahedron.h"
 
 #include "autotests.h"

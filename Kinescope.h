@@ -9,6 +9,7 @@
 #include "Sphere.h"
 #include "CImg.h"
 #include "Cuboid.h"
+#include "Tetrahedron.h"
 
 class Kinescope: protected Disp{
 protected:
@@ -35,8 +36,11 @@ public:
 
     //------Methods----------------------
     void get_image(std::shared_ptr<Sphere>);
-    void get_image(std::vector<std::shared_ptr<Figure>>);
+    void get_image(std::shared_ptr<Tetr>);
     void get_image(std::shared_ptr<Cuboid>);
+
+    void get_image(std::vector<std::shared_ptr<Figure>>);
+    
     void convert_to_bmp();
     //-----------------------------------
 };

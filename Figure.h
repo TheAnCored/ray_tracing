@@ -24,7 +24,7 @@ public:
 //--------------------------------------------------
 //------Methods-------------------------------------
     // Get-function
-    virtual std::vector<unsigned char> get_colour()=0;
+    std::vector<unsigned char> get_colour();
 
     // Set colour of figure
     void set_colour(unsigned char, unsigned char, unsigned char);
@@ -40,3 +40,4 @@ public:
 };
 
 double dot_product(std::vector<double>, std::vector<double>);
+std::vector<double> cross_product(std::vector<double>, std::vector<double>);

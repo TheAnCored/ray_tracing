@@ -29,11 +29,6 @@ Cuboid::Cuboid(Point nearest, Point farther):Figure(){
 //-------------------------------------------
 
 //-----Methods-------------------------------
-std::vector<unsigned char> Cuboid::get_colour(){
-    std::vector<unsigned char> tmp = this->colour_;
-    return tmp;
-}
-
 void Cuboid::calculate_vertexes(){
     double delta_x = vertexes[1][1][1][0] - vertexes[0][0][0][0]; 
     double delta_y = vertexes[1][1][1][1] - vertexes[0][0][0][1];
@@ -102,6 +97,7 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
     double temp_t = 0.; // Временный параметр пересечения, который будем считать
     int surf=0; // Номер плоскости, в котором лежит точка 
     
+    // Проходка по каждой грани параллелепипеда
     for(int i=0,k=0, l=0, inter=0; i<6; ++i){
     
         // Вводим ещё параметр k для того, чтобы отследить самое первое пересечение
@@ -122,10 +118,7 @@ std::tuple<bool, double, bool> Cuboid::intersection(Point& P, Point& C, Point& L
             t = ((*edges_[i][0])[l] - P[l])/(P[l]-C[l]); // Вычислсяем параметр
             
             // Вычисляем точку пересечения
-            Point M;
-            for(int j=0; j<3; ++j){
-                M[j] = P[j] + t*(P[j]-C[j]);
-            }
+            M = P;
 
             // Записываем нужные параметры
             std::get<0>(parameters) = true;

@@ -3,8 +3,8 @@
 
 #pragma once
 
-class Sphere: protected Figure{
-private:
+class Sphere: public Figure{
+protected:
     Point center_;
     double radius_;
 
@@ -30,10 +30,6 @@ public:
 
 //------Methods-------------------------------
     // Set-functions
-    void set_colour(unsigned char, unsigned char, unsigned char);
-
-    // Get-functions
-    std::vector<unsigned char> get_colour() ;
 
     // Пересечение фигуры
     std::tuple<bool, double, bool> intersection(Point& P, Point& C, Point& L);

@@ -4,9 +4,9 @@
 
 using edge = std::array<std::array<std::shared_ptr<Point>,4>, 6>;
 
-class Cuboid: protected Figure{
+class Cuboid: public Figure{
 
-private:
+protected:
     // Here are points is vertexes of rectangular cuboid
     array3d vertexes; 
     
@@ -20,9 +20,6 @@ public:
 //-------------------------------------------
 
 //-----Methods-------------------------------
-    // Get-functions
-    virtual std::vector<unsigned char> get_colour();
-
     // This is a method that allows you to find all the vertices of a cuboid by two opposite
     void calculate_vertexes();
     void calculate_edge();
