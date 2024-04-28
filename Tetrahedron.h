@@ -18,6 +18,6 @@ public:
 
 //------ Methods ---------------------------
     //
-    virtual std::tuple<bool, double, bool> intersection(Point& pixel, Point& cam, Point& light);
+    virtual std::tuple<bool, double, bool, double> intersection(Point& pixel, Point& cam, Point& light);
 //------------------------------------------
 }; 

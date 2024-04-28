@@ -34,7 +34,7 @@ public:
     void set_b(unsigned char);
 
     // the intersection of a ray and a shape
-    virtual std::tuple<bool, double, bool> intersection(Point& pixel, Point& cam, Point& light)=0;
+    virtual std::tuple<bool, double, bool, double> intersection(Point& pixel, Point& cam, Point& light)=0;
 
     //------Operators----------------
 };

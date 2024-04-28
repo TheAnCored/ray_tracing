@@ -32,7 +32,7 @@ public:
     // Set-functions
 
     // Пересечение фигуры
-    std::tuple<bool, double, bool> intersection(Point& P, Point& C, Point& L);
+    std::tuple<bool, double, bool, double> intersection(Point& P, Point& C, Point& L);
 
 //------Operators-------------
 

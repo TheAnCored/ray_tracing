@@ -38,8 +38,8 @@ Tetr::Tetr(Point& a,Point& b,Point& c, Point& d){
 //--------------------------------------
 
 //------Methods-------------------------
-std::tuple<bool, double, bool> Tetr::intersection(Point& P, Point& C, Point& L){
-   std::tuple<bool, double, bool> parameters = {false, 1, false};
+std::tuple<bool, double, bool, double> Tetr::intersection(Point& P, Point& C, Point& L){
+   std::tuple<bool, double, bool, double> parameters = {false, 1, false, 0.};
 
     // Вычисление точки пересечения
     Point M;
@@ -49,6 +49,7 @@ std::tuple<bool, double, bool> Tetr::intersection(Point& P, Point& C, Point& L){
 
     std::vector<std::vector<double>> Normal(4);
 
+   
     for(int i=0; i<4; ++i){
         std::vector<double> AB = {(*vertexes[i][1])[0]-(*vertexes[i][0])[0], (*vertexes[i][1])[1]-(*vertexes[i][0])[1], (*vertexes[i][1])[2]-(*vertexes[i][0])[2]};
         std::vector<double> AC = {(*vertexes[i][2])[0]-(*vertexes[i][0])[0], (*vertexes[i][2])[1]-(*vertexes[i][0])[1], (*vertexes[i][2])[2]-(*vertexes[i][0])[2]};
@@ -124,6 +125,8 @@ std::tuple<bool, double, bool> Tetr::intersection(Point& P, Point& C, Point& L){
             t = temp_t;
             M = m;
             std::get<0>(parameters) = true;
+            std::get<3>(parameters) = t;
+
             normal = normal_tmp;
         }   
     }
@@ -133,6 +136,7 @@ std::tuple<bool, double, bool> Tetr::intersection(Point& P, Point& C, Point& L){
 
         double module_light = sqrt(dot_product(light, light));
         double module_norm = sqrt(dot_product(normal,normal));
+
         for(int i=0; i<3; ++i){
             light[i] /= module_light;
             normal[i] /= module_norm;

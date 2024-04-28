@@ -61,27 +61,45 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
     
     // 5 ---- Пройдёмся по каждому пикселю, чтобы получить 
     // самую ближнюю точку пересечения
+    int amount = figures.size(); // Количество фигур
+
     for(unsigned int i=0; i<screen_psize_[0]; ++i){
-        for(unsigned int j=0; j<screen_psize_[1]; ++j){
-            
-            unsigned int amount = figures.size();
+        for(unsigned int j=0, fig=0; j<screen_psize_[1]; ++j){
+
+            std::vector<std::tuple<bool, double, bool, double>> parameters(amount); // Параметры пикселя
 
             // Проход по пересечениям фигуры
-            for(unsigned int k=0; k < amount; ++k){
-
-                std::tuple<bool, double, double> interns; // Параметры пикселя
-                interns = figures[k]->intersection(start, point_of_view_, this->light_); // пересечение конкретной фигурой
-
-                if(std::get<0>(interns)==1){
-                    pixel_[i][j] = figures[k]->get_colour();
-
-                    if(std::get<1>(interns)>=0){ 
-                        for(int l=0; l<3; ++l){
-                            pixel_[i][j][l] = pixel_[i][j][l]*std::get<1>(interns);
-                        }
-                    }else{ pixel_[i][j] = {0,0,0}; } 
-                }else{ pixel_[i][j] = {119, 136, 153}; }
+            //#pragma omp parallel for
+            for(int k=0; k < amount; ++k){
+                parameters[k] = figures[k]->intersection(start, point_of_view_, this->light_); // пересечение c конкретной фигурой
             }
+            
+            double temp_rad=0.;
+
+            for(int k=0, t=0; k < amount; ++k){
+                if(std::get<0>(parameters[k]) == true){ 
+                    if(t==0){ temp_rad = std::get<3>(parameters[k]); fig = k; ++t;} 
+
+                    if(std::get<3>(parameters[k]) < temp_rad){
+                        fig = k;
+                        temp_rad = std::get<3>(parameters[k]);
+                    }
+                }
+            }
+
+            if(std::get<0>(parameters[fig])==true){
+                pixel_[i][j] = figures[fig]->get_colour();
+
+                if(std::get<1>(parameters[fig]) > 0){ 
+                    for(int l=0; l<3; ++l){
+                        pixel_[i][j][l] = pixel_[i][j][l]*std::get<1>(parameters[fig]);
+                    }
+                }
+                else{ pixel_[i][j] = {0,0,0}; } 
+
+                if(std::get<2>(parameters[fig]) == 1){ pixel_[i][j] = {255,255,255};}
+            }
+            else{ pixel_[i][j] = {119, 136, 153}; }
 
             // В конце обязательно сделаем переход к соседнему cправа пикселю
             if(j < screen_psize_[1]-1){
@@ -139,10 +157,9 @@ void Kinescope::get_image(std::shared_ptr<Cuboid> figure){
     // самую ближнюю точку пересечения
     for(unsigned int i=0; i<screen_psize_[0]; ++i){
         for(unsigned int j=0; j<screen_psize_[1]; ++j){
-
             
             // Проход по пересечениям фигуры
-            std::tuple<bool, double, double> interns;
+            std::tuple<bool, double, bool, double> interns;
 
             interns = figure->intersection(start, point_of_view_, this->light_);
 
@@ -216,7 +233,7 @@ void Kinescope::get_image(std::shared_ptr<Tetr> figure){
         for(unsigned int j=0; j<screen_psize_[1]; ++j){
 
             // Проход по пересечениям фигуры
-            std::tuple<bool, double, double> interns;
+            std::tuple<bool, double, bool, double> interns;
 
             interns = figure->intersection(start, point_of_view_, this->light_);
 
@@ -291,7 +308,7 @@ void Kinescope::get_image(std::shared_ptr<Sphere> figure){
         for(unsigned int j=0; j<screen_psize_[1]; ++j){
             count++;
             // Проход по пересечениям фигуры
-            std::tuple<bool, double, double> interns;
+            std::tuple<bool, double, bool, double> interns;
 
             interns = figure->intersection(start, point_of_view_, this->light_);
             
