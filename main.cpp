@@ -21,15 +21,20 @@ int main(){
 
     Point a(4,-4,0);
     Point c(4,4,0);
-    Point b(10,3,-1);
+    Point b(10,3,2);
     Point d(8,0,5);
 
     std::shared_ptr<Sphere> sp1 = std::make_shared<Sphere>(4 ,center1);
-    std::shared_ptr<Tetr> tetr1 = std::make_shared<Tetr>(a,b,c,d);
+    //std::shared_ptr<Tetr> tetr1 = std::make_shared<Tetr>(a,b,c,d);
+    std::shared_ptr<Cuboid> cube1 = std::make_shared<Cuboid>(a,b);
+    //std::shared_ptr<Cuboid> cube2 = std::make_shared<Cuboid>(c,d);
     std::vector<std::shared_ptr<Figure>> figures;
 
+    cube1->set_colour(0, 250, 154);
+
     figures.push_back(sp1);
-    figures.push_back(tetr1);
+    figures.push_back(cube1);
+    //figures.push_back(cube2);
 
     Point center2(15,0,3);
 
