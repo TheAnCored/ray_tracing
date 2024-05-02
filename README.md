@@ -12,7 +12,7 @@
 двумя противоположными), тетераэдр - произвольными четырьмя точками.
 
 Примеры работы программы:
-![Ex1](./pictures/image1.png)
-![Ex2](./pictures/image2.png)
+![Ex1](./pictures/Image1.bmp)
+![Ex2](./pictures/Image2.bmp)
 
 Компиляция: g++/clang++ -Wall -c -fopenmp *.cpp -o 
