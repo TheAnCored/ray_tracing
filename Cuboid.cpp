@@ -11,7 +11,7 @@ Cuboid::Cuboid():Figure(){
     this->colour_ = {255,255,255};
 }
 
-Cuboid::Cuboid(Point nearest, Point farther):Figure(){
+Cuboid::Cuboid(Point a, Point b):Figure(){
     
     for(unsigned int i=0; i<2; ++i){
         for(unsigned int j=0; j<2; ++j){
@@ -21,8 +21,8 @@ Cuboid::Cuboid(Point nearest, Point farther):Figure(){
 
     this->colour_ = {255,255,255};
 
-    this->vertexes[0][0][0] = nearest;
-    this->vertexes[1][1][1] = farther;
+    this->vertexes[0][0][0] = a;
+    this->vertexes[1][1][1] = b;
 
     this->calculate_vertexes();
 }
@@ -30,6 +30,21 @@ Cuboid::Cuboid(Point nearest, Point farther):Figure(){
 
 //-----Methods-------------------------------
 void Cuboid::calculate_vertexes(){
+    // --------------------- 1 --------------------------------
+    /* Поправка к алгоритму: я сделал вычисления, построенные на идеальных данных.
+    Если будут даны противоположные точки для параллелепипеда, то тогда нужно ещё найти максимальную и минимальную точки.
+    */
+    Point A = vertexes[0][0][0]; Point B = vertexes[1][1][1];
+    std::vector<double> AB = {B[0]-A[0],B[1]-A[1],B[2]-A[2]};
+    
+    // Простой алгоритм нахождения минимальной и максимальной точек параллелепипеда
+    #pragma omp parallel for
+    for(int i=0; i<3; ++i){ 
+        if(AB[i] < 0){ B[i] += (-1)*AB[i]; A[i] += AB[i]; }
+    }
+    vertexes[0][0][0] = A; vertexes[1][1][1] = B;
+
+    // --------------------- 2 --------------------------------
     double delta_x = vertexes[1][1][1][0] - vertexes[0][0][0][0]; 
     double delta_y = vertexes[1][1][1][1] - vertexes[0][0][0][1];
 

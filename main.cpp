@@ -26,7 +26,7 @@ int main(){
 
     std::shared_ptr<Sphere> sp1 = std::make_shared<Sphere>(4 ,center1);
     //std::shared_ptr<Tetr> tetr1 = std::make_shared<Tetr>(a,b,c,d);
-    std::shared_ptr<Cuboid> cube1 = std::make_shared<Cuboid>(a,b);
+    std::shared_ptr<Cuboid> cube1 = std::make_shared<Cuboid>(b,a);
     //std::shared_ptr<Cuboid> cube2 = std::make_shared<Cuboid>(c,d);
     std::vector<std::shared_ptr<Figure>> figures;
 
