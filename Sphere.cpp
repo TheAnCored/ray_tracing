@@ -60,7 +60,7 @@ Sphere::Sphere(double radius, Point& center, std::vector<unsigned char> colour):
 
 //------Methods---------------------------------------
 
-std::tuple<bool, double, bool, double> Sphere::intersection(Point& P, Point& C, Point& L){
+std::tuple<bool, double, double, double> Sphere::intersection(Point& P, Point& C, Point& L){
     Point M; // On sphere
 
     std::vector<double> CP = {P[0]-C[0], P[1]-C[1], P[2]-C[2]}; 
@@ -70,53 +70,49 @@ std::tuple<bool, double, bool, double> Sphere::intersection(Point& P, Point& C, 
     double dot_CP_CP = dot_product(CP, CP);
     double dot_CO_CO = dot_product(CO, CO);
 
-    double discriminant = 0.0f;
+    double discriminant = 0.;
 
     // Проверка на отрицательность дискриминанта
     {
         double tmp = dot_CO_CO-radius_*radius_;
-        if(tmp < 0){ return std::tuple<bool,double, bool, double>{0,0,0,0}; }
+        if(tmp < 0){ return std::tuple<bool, double, double, double>{0,0,0,0}; }
     }
 
     discriminant = 4*dot_CP_CO*dot_CP_CO - 4*dot_CP_CP*(dot_CO_CO-radius_*radius_);
 
-    double parameter = 0., parameter1 = 0., parameter2 = 0.;
+    double parameter = 0.;
 
-    if(discriminant == 0){ 
-        parameter = dot_CP_CO/dot_CP_CP; 
+    std::tuple<bool, double, double, double> temp{0 ,0.,0.,0.};
 
-        for(int i=0; i<3; ++i){
-            M[i] = C[i] + parameter*CP[i];
+    if(discriminant >= 0){
+            
+        if(discriminant>0){
+            /*
+            Мы здесь выбираем один из двух возможных корней. Сразу будем отсекать отрицательные корни, потому что они находятся 
+            за экраном. Если оба корня отрицательны - просто возвращаем 0. 
+
+            Если меньший параметр parameter2 будет более либо равен нулю, то сразу берём его, т.к. второй по значению всегда больше
+            Если второй меньше нуля, то берём положительный первый.
+            */
+            double parameter1 = 0., parameter2 = 0.;
+            parameter1 = (2*dot_CP_CO + sqrt(discriminant))/(2*dot_CP_CP);
+            parameter2 = (2*dot_CP_CO - sqrt(discriminant))/(2*dot_CP_CP);
+
+            if(parameter2 >= 0){
+                parameter = parameter2;
+            }
+            else if(parameter2 < 0 && parameter1 >= 0){
+                parameter = parameter1;
+            }
         }
-        std::tuple<bool, double, bool,double> temp{1,0.,0,0.};
 
-        return temp;
-    }
-    else if(discriminant>0){
-        /*
-        Мы здесь выбираем один из двух возможных корней. Сразу будем отсекать отрицательные корни, потому что они находятся 
-        за экраном. Если оба корня отрицательны - просто возвращаем 0. 
-
-        Если меньший параметр parameter2 будет более либо равен нулю, то сразу берём его, т.к. второй по значению всегда больше
-        Если второй меньше нуля, то берём положительный первый.
-        */
-        parameter1 = (2*dot_CP_CO + sqrt(discriminant))/(2*dot_CP_CP);
-        parameter2 = (2*dot_CP_CO - sqrt(discriminant))/(2*dot_CP_CP);
-
-        if(parameter2 >= 0){
-            parameter = parameter2;
-        }
-        else if(parameter2 < 0 && parameter1 >= 0){
-            parameter = parameter1;
-        }
-   
         for(int i=0; i<3; ++i){
             M[i] = C[i] + parameter*CP[i];
         }
 
         // Найдем нормаль в точке касания и единичный вектор из точки касания к свету
-        std::vector<double> ML(3, 0.0f); // Вектор, соединяющий точку пресечения и свет
-        std::vector<double> OM(3, 0.0f); // Нормаль к поверхности
+        std::vector<double> ML(3, 0.); // Вектор, соединяющий точку пресечения и свет
+        std::vector<double> OM(3, 0.); // Нормаль к поверхности
         double norm_ML=0., norm_OM=0.;
 
         // Вектор от точки пересечения к свету и его нормировка
@@ -131,32 +127,50 @@ std::tuple<bool, double, bool, double> Sphere::intersection(Point& P, Point& C, 
             OM[i] /= norm_OM;
         }
 
+        // Параметры пикселя:
+        // 1) Пересечение с фигурой луча
+        // 2) Скалярное произведение между нормалью и точкой фигуры и света
+        // 3) Отражение по модели Фонга
+        // 4) Расстояние
         // Вычисление косинуса угла между двумя векторами
-        std::tuple<bool, double, bool, double> temp{true,dot_product(ML,OM),0,parameter};
+        
+        double dot_ML_OM = 0.;
+        for(int i=0; i<3; ++i){
+            dot_ML_OM += ML[i]*OM[i];
+        }
+
+        temp = {true, dot_ML_OM, 0, parameter};
 
         // Вычислим координаты вектора, противоположнонаправленного к отраженному лучу света
         // и также сразу найдём его влияние на освещение
-        if(std::get<0>(temp) == true){
+        if(std::get<1>(temp)>0.){
             std::vector<double> tau(3, 0.); 
+            std::vector<double> MC(3, 0.);
+            std::vector<double> LM(3, 0.);
+            
+            for(int i=0; i<3; ++i){
+                MC[i] = -CP[i];
+                LM[i] = -ML[i]; 
+            }
 
-            double module_CP = sqrt(dot_product(CP,CP));
+            double module_MC = sqrt(dot_product(MC,MC));
+            double module_LM = sqrt(dot_product(LM,LM));
             
             for(int i=0; i<3; ++i){ 
-                CP[i] /= module_CP;
+                MC[i] /= module_MC;
+                LM[i] /= module_LM;
             }   
-            double dot_CP_n = dot_product(CP, OM);
+            double dot_LM_n = dot_product(LM, OM);
 
+            // Нахождение отражённого вектора
             for(int i=0; i<3; ++i){
-                tau[i] = CP[i] - 2*dot_CP_n*OM[i];
+                tau[i] = LM[i] - 2*dot_LM_n*OM[i];
             }
 
-            if(dot_product(tau,ML) > 0.99){
-                std::get<2>(temp) = 1;
-            }
+            // Далее ищем коэффициент для блика
+            std::get<2>(temp) = pow(dot_product(MC, tau), 100);
         }
-
-        return temp;
     }
 
-    return {0,0,0,0};
+    return temp;
 }

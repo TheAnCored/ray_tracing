@@ -26,6 +26,68 @@ Kinescope::Kinescope(Point pnt, uint ph, uint pw, double dist,
 //------------------------------------
 
 //------Methods-----------------------
+
+void Kinescope::set_camera(Point camera){
+    this->point_of_view_ = camera;
+}
+
+void Kinescope::set_camera(double x, double y, double z){
+    Point camera(x,y,z);
+    this->point_of_view_ = camera;
+}
+
+void Kinescope::set_normal(std::vector<double> norm){
+    this->direction_of_view_ = norm;
+}
+
+void Kinescope::set_normal(double x, double y, double z){
+    std::vector<double> norm{x,y,z};
+    this->direction_of_view_ = norm;
+}
+
+void Kinescope::set_rotation(std::vector<double> rotation){
+    this->rotation_ = rotation;
+}
+
+void Kinescope::set_rotation(double x, double y, double z){
+    std::vector<double> rotation{x,y,z};
+    this->rotation_ = rotation;
+}
+
+void Kinescope::set_screen_distance(double dist){
+    this->screen_distance_ = dist;
+}
+
+void Kinescope::set_limit(double limit){
+    this->limit_of_visibility_ = limit;
+}
+
+void Kinescope::set_angle_of_view(double angle){
+    this->angle_of_vision_ = angle;
+}
+
+void Kinescope::set_light(Point light){
+    this->light_ = light;
+}
+
+void Kinescope::setup(){
+    if(this->screen_psize_[0]==0 || this->screen_psize_[1]==0){ std::cout<<"GIVEN ZERO\n---BREAK---\n\n"; return; }
+
+    this->screen_size_[0] = 2*tan(RAD(angle_of_vision_/2))*screen_distance_;
+    this->pixel_size_ = this->screen_size_[0]/this->screen_psize_[0];
+    this->screen_size_[1] = pixel_size_*this->screen_psize_[1];
+
+    this->pixel_ = pixels(this->screen_psize_[0]);
+    for(unsigned int i=0; i<this->screen_psize_[0]; ++i){
+        this->pixel_[i] = std::vector<std::vector<unsigned char>>(this->screen_psize_[1]);
+        
+        for(unsigned int j=0; j<this->screen_psize_[1]; ++j){
+            this->pixel_[i][j] = std::vector<unsigned char>(3);
+        }
+    }
+}
+
+// Images
 void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
  
     // 1 ---- Вычисление точки центра экрана
@@ -66,10 +128,15 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
     for(unsigned int i=0; i<screen_psize_[0]; ++i){
         for(unsigned int j=0, fig=0; j<screen_psize_[1]; ++j){
 
-            std::vector<std::tuple<bool, double, bool, double>> parameters(amount); // Параметры пикселя
+            // Параметры пикселя:
+            // 1) Пересечение с фигурой
+            // 2) Косинус угла между нормалью к поверхности и светом
+            // 3) Отражение луча в камеру
+            // 4) Расстояние
+
+            std::vector<std::tuple<bool, double, double, double>> parameters(amount); 
 
             // Проход по пересечениям фигуры
-            //#pragma omp parallel for
             for(int k=0; k < amount; ++k){
                 parameters[k] = figures[k]->intersection(start, point_of_view_, this->light_); // пересечение c конкретной фигурой
             }
@@ -88,18 +155,25 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
             }
 
             if(std::get<0>(parameters[fig])==true){
-                pixel_[i][j] = figures[fig]->get_colour();
+                
+                std::vector<unsigned char> tmp_clr = figures[fig]->get_colour();
 
-                if(std::get<1>(parameters[fig]) > 0){ 
+                if(std::get<1>(parameters[fig]) > 0. || std::abs(std::get<1>(parameters[fig]))<=DBL_EPSILON*std::max(std::abs(std::get<1>(parameters[fig])), std::abs(0.))){ 
                     for(int l=0; l<3; ++l){
-                        pixel_[i][j][l] = pixel_[i][j][l]*std::get<1>(parameters[fig]);
+                        if(tmp_clr[l]*(std::get<1>(parameters[fig])+std::get<2>(parameters[fig]))<255){
+                            pixel_[i][j][l] = tmp_clr[l]*(std::get<1>(parameters[fig])+std::get<2>(parameters[fig]));
+                        }
+                        else{
+                            pixel_[i][j][l] = 255;
+                        }
                     }
                 }
-                else{ pixel_[i][j] = {0,0,0}; } 
-
-                if(std::get<2>(parameters[fig]) == 1){ pixel_[i][j] = {255,255,255};}
+                else{
+                    
+                    pixel_[i][j] = {0,0,0};
+                }
             }
-            else{ pixel_[i][j] = {119, 136, 153}; }
+            else{ pixel_[i][j] = {30, 30, 30}; }
 
             // В конце обязательно сделаем переход к соседнему cправа пикселю
             if(j < screen_psize_[1]-1){

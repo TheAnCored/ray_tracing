@@ -102,8 +102,8 @@ void Cuboid::calculate_edge(){
 
 }
 
-std::tuple<bool, double, bool,double> Cuboid::intersection(Point& P, Point& C, Point& L){
-    std::tuple<bool, double, bool, double> parameters = {false, 1, false, 0.};
+std::tuple<bool, double, double,double> Cuboid::intersection(Point& P, Point& C, Point& L){
+    std::tuple<bool, double, double, double> parameters = {false, 1, 0., 0.};
 
     // Вычисление точки пересечения
     Point M;

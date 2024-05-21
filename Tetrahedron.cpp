@@ -38,8 +38,8 @@ Tetr::Tetr(Point& a,Point& b,Point& c, Point& d){
 //--------------------------------------
 
 //------Methods-------------------------
-std::tuple<bool, double, bool, double> Tetr::intersection(Point& P, Point& C, Point& L){
-   std::tuple<bool, double, bool, double> parameters = {false, 1, false, 0.};
+std::tuple<bool, double, double, double> Tetr::intersection(Point& P, Point& C, Point& L){
+   std::tuple<bool, double, double, double> parameters = {false, 1, 0., 0.};
 
     // Вычисление точки пересечения
     Point M;

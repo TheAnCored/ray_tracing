@@ -55,8 +55,8 @@ public:
     // Setup function
 
     // distance, angle
-    void setup(double, double); 
+    void setup(double distance, double angle); 
 
     // ph,pw,d,an
-    void setup(uint,uint, double, double);
+    void setup(uint pheight, uint pwidth, double distance, double angle);
 };

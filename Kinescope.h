@@ -11,7 +11,7 @@
 #include "Cuboid.h"
 #include "Tetrahedron.h"
 
-class Kinescope: protected Disp{
+class Kinescope: public Disp{
 protected:
     Point point_of_view_; // perspective projection
 
@@ -35,6 +35,17 @@ public:
     //-----------------------------------
 
     //------Methods----------------------
+    void set_camera(Point); void set_camera(double, double, double);
+    void set_normal(std::vector<double>); void set_normal(double, double, double);
+    void set_rotation(std::vector<double>); void set_rotation(double, double, double);
+    void set_screen_distance(double);
+    void set_limit(double);
+    void set_angle_of_view(double);
+    void set_light(Point);
+
+    void setup();
+
+    // Images
     void get_image(std::shared_ptr<Sphere>);
     void get_image(std::shared_ptr<Tetr>);
     void get_image(std::shared_ptr<Cuboid>);

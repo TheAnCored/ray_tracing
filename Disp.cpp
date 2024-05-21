@@ -66,8 +66,10 @@ int Disp::get_pwidth(){ return this->screen_psize_[1]; }
 double Disp::get_height(){ return this->screen_size_[0]; }
 double Disp::get_width(){ return this->screen_size_[1]; }
 
-void Disp::set_pheight(uint height){ this->screen_size_[0] = height; }
-void Disp::set_pwidth(uint width){ this->screen_size_[1] = width; }
+void Disp::set_pheight(uint height){ 
+    this->screen_psize_[0] = height; }
+void Disp::set_pwidth(uint width){ 
+    this->screen_psize_[1] = width; }
 
 void Disp::set_height(double height){ this->screen_size_[0] = height; }
 void Disp::set_width(double width){ this->screen_size_[1] = width; }
