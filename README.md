@@ -18,4 +18,4 @@
 ### Пример 2
 ![Ex2](./pictures/Image2.bmp)
 
-Компиляция: g++/clang++ -Wall -c -fopenmp *.cpp -o 
+Компиляция: g++/clang++ -fopenmp -Wall *.cpp -o hell.exe -lgdi32 -fopenmp
