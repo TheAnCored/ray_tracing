@@ -83,10 +83,10 @@ void Disp::setup(double distance, double angle){
 
     // Выделение памяти для массива пикселей
     this->pixel_ = pixels(this->screen_psize_[0]);
-    for(unsigned int i=0; i<this->screen_psize_[0]; ++i){
+    for(int i=0; i<this->screen_psize_[0]; ++i){
         this->pixel_[i] = std::vector<std::vector<unsigned char>>(this->screen_psize_[1]);
         
-        for(unsigned int j=0; j<this->screen_psize_[1]; ++j){
+        for(int j=0; j<this->screen_psize_[1]; ++j){
             this->pixel_[i][j] = std::vector<unsigned char>(3);
         }
     }
@@ -102,10 +102,10 @@ void Disp::setup(uint pheight, uint pwidth, double distance, double angle){
     this->screen_size_[1] = pixel_size_*this->screen_psize_[1];
 
     this->pixel_ = pixels(this->screen_psize_[0]);
-    for(unsigned int i=0; i<this->screen_psize_[0]; ++i){
+    for(int i=0; i<this->screen_psize_[0]; ++i){
         this->pixel_[i] = std::vector<std::vector<unsigned char>>(this->screen_psize_[1]);
         
-        for(unsigned int j=0; j<this->screen_psize_[1]; ++j){
+        for(int j=0; j<this->screen_psize_[1]; ++j){
             this->pixel_[i][j] = std::vector<unsigned char>(3);
         }
     }

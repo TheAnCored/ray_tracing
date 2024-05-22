@@ -11,13 +11,13 @@
 
 using uint = unsigned int;
 using size = std::array<double,2>;
-using psize = std::array<unsigned int,2>;
+using psize = std::array<int,2>;
 using vect = std::vector<double>;
 using pixels = std::vector<std::vector<std::vector<unsigned char>>>; // enumerate pixels like an elements in matrix
 
 class Disp{
 protected:
-    // vertical is height, horizontal is width
+    // vertical(i.e. 0) is height, horizontal (i.e. 1) is width
     psize screen_psize_; // in PIXEL
     double pixel_size_; // in double
     size screen_size_; // in double

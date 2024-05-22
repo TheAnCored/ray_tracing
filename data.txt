@@ -6,23 +6,28 @@
 // SCENE .... END_SCENE
 // FIGURES .... END_FIGURES
 
+// Тетраэдр задаётся четырьмя точками
+// Сфера задаётся радиусом и точкой
+// Параллелепипед задаётся двумя противоположными точками
+
 SCENE
 
-cam -2 12 4
-normal 1.5 -2 -1
+cam 0 0 0
+normal 1 0 0
 up 0 0 1
 screen 2.5
 limit 40
 alpha 90
 height 1200
 width 2560
-light 9 20 5
+light -3 8 3
 
 END_SCENE
 
 FIGURES
 
-sphere 4 2 3 -4
-cuboid 10 3 2 4 -4 0
+sphere 2 14 0 0
+tetr 7.1 -3.8 4.9 7.8 -2.2 0 6 -3 -2 8.5 -6.6 -2.2
+cuboid 10 3 2 4 6 -2
 
 END_FIGURES

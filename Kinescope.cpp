@@ -78,10 +78,10 @@ void Kinescope::setup(){
     this->screen_size_[1] = pixel_size_*this->screen_psize_[1];
 
     this->pixel_ = pixels(this->screen_psize_[0]);
-    for(unsigned int i=0; i<this->screen_psize_[0]; ++i){
+    for(int i=0; i<this->screen_psize_[0]; ++i){
         this->pixel_[i] = std::vector<std::vector<unsigned char>>(this->screen_psize_[1]);
         
-        for(unsigned int j=0; j<this->screen_psize_[1]; ++j){
+        for(int j=0; j<this->screen_psize_[1]; ++j){
             this->pixel_[i][j] = std::vector<unsigned char>(3);
         }
     }
@@ -124,9 +124,15 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
     // 5 ---- Пройдёмся по каждому пикселю, чтобы получить 
     // самую ближнюю точку пересечения
     int amount = figures.size(); // Количество фигур
+    Point coord_ = start;
 
-    for(unsigned int i=0; i<screen_psize_[0]; ++i){
-        for(unsigned int j=0, fig=0; j<screen_psize_[1]; ++j){
+    //#pragma omp parallel for 
+    for(int i=0; i<screen_psize_[0]; ++i){
+        for(int j=0, fig = 0; j<screen_psize_[1]; ++j){
+            // Для распараллеливания координаты пикселя
+            Point coord_(start[0]+(-1)*tau[0]*pixel_size_*j+(-1)*rotation_[0]*pixel_size_*i,
+                         start[1]+(-1)*tau[1]*pixel_size_*j+(-1)*rotation_[1]*pixel_size_*i, 
+                         start[2]+(-1)*tau[2]*pixel_size_*j+(-1)*rotation_[2]*pixel_size_*i);
 
             // Параметры пикселя:
             // 1) Пересечение с фигурой
@@ -138,7 +144,7 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
 
             // Проход по пересечениям фигуры
             for(int k=0; k < amount; ++k){
-                parameters[k] = figures[k]->intersection(start, point_of_view_, this->light_); // пересечение c конкретной фигурой
+                parameters[k] = figures[k]->intersection(coord_, point_of_view_, this->light_); // пересечение c конкретной фигурой
             }
             
             double temp_rad=0.;
@@ -169,24 +175,10 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
                     }
                 }
                 else{
-                    
                     pixel_[i][j] = {0,0,0};
                 }
             }
             else{ pixel_[i][j] = {30, 30, 30}; }
-
-            // В конце обязательно сделаем переход к соседнему cправа пикселю
-            if(j < screen_psize_[1]-1){
-                for(int k=0; k<3; ++k){ start[k] += (-1)*tau[k]*pixel_size_; }
-            }
-        }
-
-        // Переход на следующую строку
-        if(i < screen_psize_[0]-1){
-            for(int k=0; k<3; ++k){ 
-                start[k] += tau[k]*pixel_size_*(screen_psize_[1]-1); 
-                start[k] += (-1)*rotation_[k]*pixel_size_;
-            }
         }
     }
 
@@ -229,8 +221,8 @@ void Kinescope::get_image(std::shared_ptr<Cuboid> figure){
 
     // 5 ---- Пройдёмся по каждому пикселю, чтобы получить 
     // самую ближнюю точку пересечения
-    for(unsigned int i=0; i<screen_psize_[0]; ++i){
-        for(unsigned int j=0; j<screen_psize_[1]; ++j){
+    for(int i=0; i<screen_psize_[0]; ++i){
+        for(int j=0; j<screen_psize_[1]; ++j){
             
             // Проход по пересечениям фигуры
             std::tuple<bool, double, bool, double> interns;
@@ -303,8 +295,8 @@ void Kinescope::get_image(std::shared_ptr<Tetr> figure){
 
     // 5 ---- Пройдёмся по каждому пикселю, чтобы получить 
     // самую ближнюю точку пересечения
-    for(unsigned int i=0; i<screen_psize_[0]; ++i){
-        for(unsigned int j=0; j<screen_psize_[1]; ++j){
+    for(int i=0; i<screen_psize_[0]; ++i){
+        for(int j=0; j<screen_psize_[1]; ++j){
 
             // Проход по пересечениям фигуры
             std::tuple<bool, double, bool, double> interns;
@@ -378,8 +370,8 @@ void Kinescope::get_image(std::shared_ptr<Sphere> figure){
     // 5 ---- Пройдёмся по каждому пикселю, чтобы получить 
     // самую ближнюю точку пересечения
     int count=0;
-    for(unsigned int i=0; i<screen_psize_[0]; ++i){
-        for(unsigned int j=0; j<screen_psize_[1]; ++j){
+    for(int i=0; i<screen_psize_[0]; ++i){
+        for(int j=0; j<screen_psize_[1]; ++j){
             count++;
             // Проход по пересечениям фигуры
             std::tuple<bool, double, bool, double> interns;
