@@ -129,7 +129,8 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
     //#pragma omp parallel for 
     for(int i=0; i<screen_psize_[0]; ++i){
         for(int j=0, fig = 0; j<screen_psize_[1]; ++j){
-            // Для распараллеливания координаты пикселя
+
+            // Для распараллеливания задаём координаты пикселя отдельно
             Point coord_(start[0]+(-1)*tau[0]*pixel_size_*j+(-1)*rotation_[0]*pixel_size_*i,
                          start[1]+(-1)*tau[1]*pixel_size_*j+(-1)*rotation_[1]*pixel_size_*i, 
                          start[2]+(-1)*tau[2]*pixel_size_*j+(-1)*rotation_[2]*pixel_size_*i);
