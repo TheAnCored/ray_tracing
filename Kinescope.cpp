@@ -126,7 +126,7 @@ void Kinescope::get_image(std::vector<std::shared_ptr<Figure>> figures){
     int amount = figures.size(); // Количество фигур
     Point coord_ = start;
 
-    //#pragma omp parallel for 
+    #pragma omp parallel for 
     for(int i=0; i<screen_psize_[0]; ++i){
         for(int j=0, fig = 0; j<screen_psize_[1]; ++j){
 
